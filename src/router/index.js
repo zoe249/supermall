@@ -13,22 +13,35 @@ Vue.use(VueRouter)
 
 const routes = [{
         path: '',
-        redirect: '/home'
+        redirect: '/Home'
     }, {
         path: '/home',
-        component: Home
+        component: Home,
+        nem: Home,
+        mate: {
+            title: '首页'
+        }
     },
     {
         path: '/category',
-        component: Categroy
+        component: Categroy,
+        mate: {
+            title: '首页'
+        }
     },
     {
         path: '/cart',
-        component: Cart
+        component: Cart,
+        mate: {
+            title: '首页'
+        }
     },
     {
         path: '/profile',
-        component: Profile
+        component: Profile,
+        mate: {
+            title: '首页'
+        }
     }
 ]
 
@@ -37,5 +50,14 @@ const router = new VueRouter({
     base: process.env.BASE_URL,
     routes
 })
+
+// router.beforeEach((to, from, next) => {
+//     // ${//to and from are Route Object,next() must be called to resolve the hook}
+//     if (to.mate.title) {
+//         document.title = to.mete.title
+//     }
+//     next()
+
+// })
 
 export default router
