@@ -113,8 +113,17 @@ export default {
       
     },
     mounted () {
-          new BScroll('.wrapper',{
+        this.scroll =   new BScroll(document.querySelector('.wrapper'),{
+            probeType:2,
+            pullUpLoad:true
+        })
 
+        this.scroll.on('scroll',(position)=>{
+            console.log(position)
+        })
+
+        this.scroll.on('pullingUp',()=>{
+            console.log('加载')
         })
     }
 }
@@ -124,5 +133,6 @@ export default {
     .wrapper{
         height: 150px;
         background: coral;
+        overflow: hidden;
     }
 </style>
