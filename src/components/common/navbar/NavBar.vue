@@ -14,10 +14,11 @@ export default {
 
 <style scoped>
     #nav-bar{
-        /* display: flex; */
+        display: flex;
         height: 44px;
         line-height: 44px;
         /* position:fixed; */
+        box-shadow: 0 2px 1px rgba(100,100,100,.1);
     }
     .left,.right{
         width: 60px;

@@ -8,6 +8,9 @@ const Cart = () =>
     import ('../views/cart/Cart.vue')
 const Profile = () =>
     import ('../views/profile/Profile.vue')
+const Detail = () =>
+    import ('../views/detail/Detail.vue')
+
 
 Vue.use(VueRouter)
 
@@ -17,9 +20,16 @@ const routes = [{
     }, {
         path: '/home',
         component: Home,
-        nem: Home,
+
         mate: {
             title: '首页'
+        }
+    },
+    {
+        path: '/detail/:iid',
+        component: Detail,
+        meta: {
+            title: '详情'
         }
     },
     {
