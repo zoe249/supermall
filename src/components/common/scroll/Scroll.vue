@@ -15,6 +15,10 @@ export default {
             type:Number,
             default:0
         },
+        pullUpLoad:{
+            type:Boolean,
+            default:false
+        }
     
     },
     data () {
@@ -34,13 +38,22 @@ export default {
 
 
         // 2.监听滚动的位置
-        this.scroll.on('scroll',(position)=>{
+        if(this.probeType === 2 || this.probeType === 3){
+            this.scroll.on('scroll',(position)=>{
             // console.log(position)
             this.$emit('scroll',position)
             // console.log(this.scroll)
         })
-        // 3.监听上拉事件
-
+        }
+        
+        // 3.监听上拉事件,监听scroll滚动条到底部
+        if(this.pullUpLoad){
+            this.scroll.on('pullingUp',()=>{
+               this.$emit('pullingUp')
+            })
+        }
+        
+        
        
     },
     methods: {
@@ -49,11 +62,14 @@ export default {
         },
 
         finishPullUp(){
-            this.scroll.finishPullUp()
+          this.scroll &&  this.scroll.finishPullUp()
         },
         refresh(){
            this.scroll && this.scroll.refresh()
-           console.log('aaa')
+        //    console.log('aaa')
+        },
+        getScrollY(){
+            return this.scroll ? this.scroll.y : 0
         }
     }
 }

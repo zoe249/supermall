@@ -3,21 +3,32 @@
     <!-- Nav顶部导航 -->
     <nav-bar class="home-nav"><div slot="center">购物车</div></nav-bar>
     <!-- <router-view/> -->
-    <!-- 轮播图 -->
+
+      <tab-control
+        class="tab-control"
+        :titles="['精品', '潮流', '热卖']"
+        @tabClick="tabClick"
+       ref="tabControl1"
+       v-show="isTabFixed"
+       />
+    
     <scroll
       class="content"
       ref="scroll"
       :probe-type="3"
       @scroll="contentScroll"
-      pull-up-load="true">
-      <home-swiper :banners="banners"></home-swiper>
+      :pull-up-load="true"
+      @pullingUp="loadMore">
+      <!-- 轮播图 -->
+      <home-swiper :banners="banners" @swiperImageLoad="swiperImageLoad"></home-swiper>
       <recomment-view :recommends="recommends" />
       <feature-view />
       <tab-control
-        class="tab-control"
+        
         :titles="['精品', '潮流', '热卖']"
         @tabClick="tabClick"
-      ></tab-control>
+       ref="tabControl2"
+       />
       <goods-list
         class="goods-list"
         v-for="(item, index) in goods"
@@ -38,6 +49,7 @@ import goodsList from "@/components/context/goods/goodsList.vue";
 import Scroll from "@/components/common/scroll/Scroll.vue";
 
 import { getHomeMultidata, getHomeGoods } from "@/network/home";
+import {debounce} from '@/common/utils'
 
 import HomeSwiper from "./childComps/HomeSwiper.vue";
 import RecommentView from "./childComps/RecommendView.vue";
@@ -56,6 +68,10 @@ export default {
       },
       currentType: "pop",
       isShowBackTop: false,
+      topOffsetTop:0,
+      isTabFixed:false,
+      saveY:0
+     
     };
   },
   created() {
@@ -67,16 +83,22 @@ export default {
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
 
+   
+
     
   },
   mounted() {
     // 监听item中图片加载完成
-    const refresh = this.debounce(this.$refs.scroll.refresh,200)
+    const refresh = debounce(this.$refs.scroll.refresh,200)
     
     this.$bus.$on('itemImageLoad',()=>{
       // console.log('------------')
      refresh()
     })
+
+     // 赋值
+     
+    
   },
   computed: {
     showGoods() {
@@ -99,7 +121,7 @@ export default {
         this.goods[type].list.push(...res.data.data.list);
         this.goods[type].page += 1;
 
-        // this.$refs.scroll.finishPullUp()
+        this.$refs.scroll.finishPullUp()
       });
     },
 
@@ -116,6 +138,8 @@ export default {
           this.currentType = "sell";
           break;
       }
+      this.$refs.tabControl1.currentIndex = index
+      this.$refs.tabControl2.currentIndex = index
     },
     // 回到顶部
     backClick() {
@@ -127,19 +151,30 @@ export default {
       // }else{
       //   this.isShowBackTop = false
       // }
+
+
+      // 判断backtop是否显示
       this.isShowBackTop = -position.y > 1000;
+      // 判断tabcontrol是否吸顶（position：fixed）
+      this.isTabFixed = (-position.y) > this.topOffsetTop
     },
-    // 防抖函数
-    debounce(func,delay){
-      let timer = null;
-      return function(...args) {
-        if (timer) clearTimeout(timer)
-        timer = setTimeout(()=>{
-          func.apply(this,args)
-        },delay)
-      }
+    // 下拉加载更多
+    loadMore(){
+      this.getHomeGoods(this.currentType)
+    },
+    swiperImageLoad(){
+        // console.log(this.$refs.tabControl1.currentIndex)
+        //  console.log(this.$refs.tabControl2.currentIndex)
+        this.topOffsetTop = this.$refs.tabControl2.$el.offsetTop
     }
     
+  },
+  activated () {
+    this.$refs.scroll.scrollTo(0,this.saveY)
+    this.$refs.scroll.refresh()
+  },
+  deactivated () {
+    this.saveY = this.$refs.scroll.getScrollY
   },
   components: {
     HomeSwiper,
@@ -157,7 +192,7 @@ export default {
 
 <style lang="less" scoped>
 #home {
-  padding-top: 44px;
+  // padding-top: 44px;
   height: 100vh;
   position: relative;
 }
@@ -166,16 +201,16 @@ export default {
   // margin: 3px 5px;
   color: #fff;
   font-weight: 900;
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  z-index: 99;
+  // position: fixed;
+  // left: 0;
+  // right: 0;
+  // top: 0;
+  // z-index: 10;
 }
 .tab-control {
   z-index: 9;
-  position: sticky;
-  top: 44px;
+  position:relative;
+  // top: 44px;
   background: #fff;
 }
 
@@ -196,4 +231,7 @@ export default {
 //   overflow: hidden;
 //   margin-top: 44px;
 // }
+
+// 吸顶效果
+
 </style>
