@@ -50,6 +50,7 @@ import Scroll from "@/components/common/scroll/Scroll.vue";
 
 import { getHomeMultidata, getHomeGoods } from "@/network/home";
 import {debounce} from '@/common/utils'
+import {itemListenerMixin} from '@/common/mixin'
 
 import HomeSwiper from "./childComps/HomeSwiper.vue";
 import RecommentView from "./childComps/RecommendView.vue";
@@ -57,6 +58,7 @@ import FeatureView from "./childComps/FeatureView.vue";
 import BackTop from "@/components/context/backTop/BackTop.vue";
 
 export default {
+  mixins: [itemListenerMixin],
   data() {
     return {
       banners: [],
@@ -70,7 +72,8 @@ export default {
       isShowBackTop: false,
       topOffsetTop:0,
       isTabFixed:false,
-      saveY:0
+      saveY:0,
+      
      
     };
   },
@@ -89,15 +92,6 @@ export default {
   },
   mounted() {
     // 监听item中图片加载完成
-    const refresh = debounce(this.$refs.scroll.refresh,200)
-    
-    this.$bus.$on('itemImageLoad',()=>{
-      // console.log('------------')
-     refresh()
-    })
-
-     // 赋值
-     
     
   },
   computed: {
@@ -174,7 +168,12 @@ export default {
     this.$refs.scroll.refresh()
   },
   deactivated () {
+    // 消除活跃状态，保存y
     this.saveY = this.$refs.scroll.getScrollY
+
+    // 取消全局事件的监听
+    this.$bus.$off('itemImgLoad',this.ItemImgListener)
+    
   },
   components: {
     HomeSwiper,

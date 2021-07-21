@@ -28,6 +28,7 @@ const routes = [{
     {
         path: '/detail/:iid',
         component: Detail,
+
         meta: {
             title: '详情'
         }
