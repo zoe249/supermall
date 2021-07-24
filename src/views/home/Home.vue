@@ -38,7 +38,7 @@
     </scroll>
 
     <!-- 返回顶部 -->
-    <back-top @click.native="backClick" v-show="isShowBackTop" />
+    <back-top @click.native="backTop" v-show="isShowBackTop" />
   </div>
 </template>
 
@@ -50,15 +50,14 @@ import Scroll from "@/components/common/scroll/Scroll.vue";
 
 import { getHomeMultidata, getHomeGoods } from "@/network/home";
 import {debounce} from '@/common/utils'
-import {itemListenerMixin} from '@/common/mixin'
+import {itemListenerMixin,backTopMixin} from '@/common/mixin'
 
 import HomeSwiper from "./childComps/HomeSwiper.vue";
 import RecommentView from "./childComps/RecommendView.vue";
 import FeatureView from "./childComps/FeatureView.vue";
-import BackTop from "@/components/context/backTop/BackTop.vue";
 
 export default {
-  mixins: [itemListenerMixin],
+  mixins: [itemListenerMixin,backTopMixin],
   data() {
     return {
       banners: [],
@@ -69,7 +68,6 @@ export default {
         sell: { page: 0, list: [] },
       },
       currentType: "pop",
-      isShowBackTop: false,
       topOffsetTop:0,
       isTabFixed:false,
       saveY:0,
@@ -135,10 +133,6 @@ export default {
       this.$refs.tabControl1.currentIndex = index
       this.$refs.tabControl2.currentIndex = index
     },
-    // 回到顶部
-    backClick() {
-      this.$refs.scroll.scrollTo(0, 0, 1000);
-    },
     contentScroll(position) {
       // if( (-position.y) > 1000){
       //   this.isShowBackTop = true
@@ -148,9 +142,10 @@ export default {
 
 
       // 判断backtop是否显示
-      this.isShowBackTop = -position.y > 1000;
-      // 判断tabcontrol是否吸顶（position：fixed）
-      this.isTabFixed = (-position.y) > this.topOffsetTop
+      // this.isShowBackTop = -position.y > 1000;
+      // // 判断tabcontrol是否吸顶（position：fixed）
+      // this.isTabFixed = (-position.y) > this.topOffsetTop
+      this.listenShoBackTop(position)
     },
     // 下拉加载更多
     loadMore(){
@@ -179,7 +174,6 @@ export default {
     HomeSwiper,
     RecommentView,
     FeatureView,
-    BackTop,
 
     NavBar,
     TabControl,
