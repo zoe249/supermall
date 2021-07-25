@@ -31,7 +31,7 @@
 
     <detail-bottom-bar class="detail-bottom-bar" @addCart="addToCart" />
     <back-top @click.native="backTop" v-show="isShowBackTop" class="back-top" />
-    <toast :message="message" :show="show"/>
+    <!-- <toast :message="message" :show="show"/> -->
   </div>
 </template>
 
@@ -45,7 +45,7 @@ import DetailParamInfo from "./childComps/DetailParamInfo.vue";
 import DetailCommentInfo from "./childComps/DetailCommentInfo.vue";
 import DetailBottomBar from "./childComps/DetailBottomBar.vue";
 
-import Toast from  '@/components/common/toast/toast.vue'
+// import Toast from  '@/components/common/toast/toast.vue'
 import GoodList from "@/components/context/goods/goodsList.vue";
 import { itemListenerMixin, backTopMixin } from "@/common/mixin";
 
@@ -77,8 +77,8 @@ export default {
       themeTopYs: [],
       getThemeTopY: null,
       currentIndex: 0,
-      message:'',
-      show:false
+      // message:'',
+      // show:false
     };
   },
   created() {
@@ -173,13 +173,15 @@ export default {
       // this.$store.cartList.push(product)
       // 2.将商品添加到购物车(1.Promise 2.mapActions)
       this.addCart(product).then((res) => {
-        this.show = true 
-        this.message = res
-        // console.log(res);
+        // this.show = true 
+        // this.message = res
+        // // console.log(res);
 
-        setTimeout(()=>{
-          this.show = false
-        },1500)
+        // setTimeout(()=>{
+        //   this.show = false
+        // },1500)
+        this.$toast.show(res)
+        console.log(this.$toast)
       });
 
       // this.$store.dispatch('addCart',product).then(res=>{
@@ -200,7 +202,6 @@ export default {
     DetailBottomBar,
 
     GoodList,
-    Toast,
 
     Scroll,
   },
