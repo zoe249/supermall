@@ -18,6 +18,8 @@ import NavBar from '@/components/common/navbar/NavBar.vue'
 import CartList from './childComps/CartList.vue'
 import CartBottomBar from './childComps/CartBottomBar.vue'
 
+
+
 import {mapGetters} from 'vuex'
 export default {
   name:'cart',
@@ -37,7 +39,8 @@ export default {
   components: {
     NavBar,
     CartList,
-    CartBottomBar
+    CartBottomBar,
+    
   }
 };
 </script>
