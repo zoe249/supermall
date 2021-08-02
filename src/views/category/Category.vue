@@ -2,32 +2,39 @@
   <div class="category">
     <!-- 顶部导航 -->
     <nav-bar class="category-nav"><div slot="center">商品分类</div></nav-bar>
+    <div class="content">
+         <category-left class="left"  :LeftList="LeftList" @clickRight="clickRight" />
 
-    <category-left  :LeftList="LeftList" @clickRight="clickRight" />
-
-    <category-right :RightList="rightList"/>
+          <category-right class="right" :RightList="rightList" :detaList="detaList"/>  
+    </div>
+   
   </div>
 </template>
 
 <script>
 import NavBar from "@/components/common/navbar/NavBar.vue";
+
+
 import CategoryLeft from "./childComps/CategoryLeft.vue";
 import CategoryRight from "./childComps/CategoryRight.vue";
 
 import Scroll from "@/components/common/scroll/Scroll.vue";
 
-import { getCotegory, getCotegoryRight } from "@/network/cotegory";
+import { getCotegory, getCotegoryRight, getCategoryDetail } from "@/network/cotegory";
 export default {
   data() {
     return {
       LeftList: [],
       key: "3627",
-      rightList:[]
+      rightList:[],
+      miniWallkey:"10062603",
+      detaList:[]
     };
   },
   created() {
     this.getCotegory();
     this.getCotegoryRight();
+    this.getCategoryDetail(this.miniWallkey);
   },
   mounted() {
     // this.scroll =   new BScroll(document.querySelector('.wrapper'),{
@@ -47,12 +54,19 @@ export default {
       getCotegory().then((res) => {
         this.LeftList = res.data.data.category.list;
         console.log(this.LeftList);
+        // console.log(res)
       });
     },
     //  获取右侧列表
-    clickRight(key) {
+    clickRight(key,miniWallkey) {
       this.key = key;
+      this.miniWallkey = miniWallkey;
+      console.log(this.miniWallkey)
+      // 获取商品图片
       this.getCotegoryRight(this.key);
+
+      // 获取商品详细信息
+      this.getCategoryDetail(this.miniWallkey)
     },
     getCotegoryRight(key) {
       getCotegoryRight(key).then((res) => {
@@ -60,9 +74,17 @@ export default {
         console.log(this.rightList);
       });
     },
+    getCategoryDetail(miniWallkey){
+      getCategoryDetail(miniWallkey).then(res =>{
+        this.detaList = res.data
+        console.log(this.detaList)
+      })
+    }
   },
   components: {
     NavBar,
+
+
     CategoryLeft,
     CategoryRight,
 
@@ -72,23 +94,24 @@ export default {
 </script>
 
 <style scoped>
-/* .wrapper{
-        height: 150px;
-        background: coral;
-        overflow: hidden;
-    } */
-.category {
-  /* padding-bottom: 49px; */
-}
-
 .category-nav {
     position: absolute;
     left: 0;
     right: 0;
-  background: pink;
+  background: #FF7891;
   color: white;
   font-weight: 900;
   z-index: 999;
+}
+.content{
+  display: flex;
+  padding-top: 44px;
+}
+.left{
+  width: 75px;
+}
+.right{
+  
 }
 /*  */
 </style>

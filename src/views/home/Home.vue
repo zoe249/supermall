@@ -190,7 +190,8 @@ export default {
   position: relative;
 }
 .home-nav {
-  background: pink;
+    background: #FF7891;
+
   // margin: 3px 5px;
   color: #fff;
   font-weight: 900;
