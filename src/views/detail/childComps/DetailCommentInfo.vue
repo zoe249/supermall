@@ -4,23 +4,23 @@
             <div class="header-title">用户评价</div>
             <div class="header-more">更多></div>
         </div>
-        <div class="info-content" v-if="comment && comment.length">
+        <div class="info-content" v-if="commentInfo && commentInfo.length != 0 ">
             <div>
                 <div class="user">
                     <span>
-                        <img :src="comment.user.avatar" alt="avatar">
+                        <img v-lazy="commentInfo.user.avatar" alt="avatar">
                     </span>
-                    <span class="name">{{comment.user.uname}}</span>
+                    <span class="name">{{commentInfo.user.uname}}</span>
                 </div>
                 <div class="comment-detail">
-                    <div class="desc">{{comment.content}}</div>
+                    <div class="desc">{{commentInfo.content}}</div>
                     <div class="other">
-                        <span class="date">{{comment.created | formatDate("yyyy-MM-dd")}}</span>
-                        <span class="color">{{comment.style}}</span>
+                        <span class="date">{{commentInfo.created | formatDate("yyyy-MM-dd")}}</span>
+                        <span class="color">{{commentInfo.style}}</span>
                     </div>
-                    <div class="comment-img" v-if="comment.images && comment.images.length">
+                    <div class="comment-img" v-if="commentInfo.images && commentInfo.images">
                         <img 
-                        v-for="(item, index) in comment.images" 
+                          v-for="(item, index) in commentInfo.images" 
                         :key="index"
                          :src="item" alt="avatar">
                     </div>
@@ -42,13 +42,13 @@ export default {
             }
         }
     },
-    created () {
-      // console.log(commentInfo)
-    },
     computed: {
         comment(){
             return Object.keys(this.commentInfo).length && this.commentInfo.list && this.commentInfo.list[0];
-        }
+        },
+        // commentImge(){
+        //     return this.commentInfo.imgaes && this.commentInfo.imgaes
+        // }
     },
     filters:{
        formatDate(date, fmt) {
@@ -105,10 +105,14 @@ export default {
 .comment-detail .desc {
     padding: 4px;
     text-indent: 2em;
+    font-size: 15px;
     color: var(--color-text);
 }
 .comment-detail .other {
     color: var(--color-text);
+    margin: 5px 5px;
+    font-size: 13px;
+    color: #ccc;
 }
 .comment-detail .other span {
     padding: 4px;

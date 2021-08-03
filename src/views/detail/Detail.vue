@@ -26,7 +26,7 @@
         :commentInfo="commentInfo"
         class="detail-comment-info"
       />
-      <good-list ref="recommend" :goods="recommend" class="good-lis" />
+      <good-list ref="recommend" :goods="recommend" class="good-list" />
     </scroll>
 
     <detail-bottom-bar class="detail-bottom-bar" @addCart="addToCart" />
@@ -106,12 +106,14 @@ export default {
       //6. 取出评论信息
       if (data.rate.cRate != 0) {
         this.commentInfo = data.rate.list[0];
+        console.log(this.commentInfo)
       }
       // 监听详情加载完
     });
 
     getRecommend().then((res) => {
       this.recommend = res.data.data.list;
+      // console.log(this.recommend)
     });
     // 给getThemeTopY赋值
     this.getThemeTopY = debounce(() => {
@@ -169,7 +171,7 @@ export default {
       product.desc = this.goods.desc;
       product.price = this.goods.newPrice;
       product.iid = this.iid;
-      console.log(product);
+      // console.log(product);
       // this.$store.cartList.push(product)
       // 2.将商品添加到购物车(1.Promise 2.mapActions)
       this.addCart(product).then((res) => {
@@ -181,7 +183,7 @@ export default {
         //   this.show = false
         // },1500)
         this.$toast.show(res)
-        console.log(this.$toast)
+        // console.log(this.$toast)
       });
 
       // this.$store.dispatch('addCart',product).then(res=>{
@@ -235,7 +237,7 @@ export default {
   z-index: 10;
   background: white;
 }
-.good-lis {
+.good-list {
   position: relative;
   z-index: 10;
   background: white;

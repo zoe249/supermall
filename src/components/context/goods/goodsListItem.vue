@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item" @click="itemClick">
-    <img v-lazy="showImage" alt="" @load="imageLoad"/>
+    <img v-lazy="showImage" alt="" @load="itemImgLoad" />
     <div class="goods-info">
       <p>{{ goodsItem.title }}</p>
       <span class="price">{{ goodsItem.price }}</span>
@@ -19,29 +19,38 @@ export default {
       },
     },
   },
-  created () {
+  created() {
     // console.log(this.goodsItem)
   },
-   computed: {
-      showImage(){
-          return this.goodsItem.img || this.goodsItem.show.img
-      }  
+  computed: {
+    showImage() {
+      // if(this.goodsItem.img){
+      //     return this.goodsItem.img 
+      // }else if(this.goodsItem.image){
+      //   return this.goodsItem.image
+      // }else{
+      //   return this.goodsItem.show.img
+      // }
+       return this.goodsItem.img || this.goodsItem.image || this.goodsItem.show.img
+      
+      
     },
+  },
 
   methods: {
-    imageLoad(){
+    itemImgLoad() {
       // if(this.$route.path.indexOf('/Home')){
       //   this.$bus.$emit('itemImageLoad')
       // }else if(this.$route.path.indexOf('/detail')){
       //   this.$bus.$emit('DetailItemImgLoad')
       // }
-      
+      this.$bus.$emit('itemImgLoad')
     },
-    itemClick(){
-      this.$router.push('/detail/'+this.goodsItem.iid)
+    itemClick() {
+      this.$router.push("/detail/" + this.goodsItem.iid);
       // console.log(this.goodsItem.iid)
-    }
-  }
+    },
+  },
 };
 </script>
 

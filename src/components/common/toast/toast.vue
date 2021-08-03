@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     show(message='默认文字', duration=1500) {
-        console.log('nihao ')
+        // console.log('nihao ')
       this.isShow = true;
       this.message = message;
       setTimeout(() => {

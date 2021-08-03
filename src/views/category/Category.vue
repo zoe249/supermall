@@ -5,7 +5,7 @@
     <div class="content">
          <category-left class="left"  :LeftList="LeftList" @clickRight="clickRight" />
 
-          <category-right class="right" :RightList="rightList" :detaList="detaList"/>  
+          <category-right class="right" ref="category-right" :RightList="rightList" :detaList="detaList" @tabType="tabType"/>  
     </div>
    
   </div>
@@ -53,31 +53,34 @@ export default {
     getCotegory() {
       getCotegory().then((res) => {
         this.LeftList = res.data.data.category.list;
-        console.log(this.LeftList);
+        // console.log(this.LeftList);
         // console.log(res)
       });
+    },
+    // 获取type
+    tabType(type){
+        console.log(type),
+        this.getCategoryDetail(this.miniWallkey,type)
     },
     //  获取右侧列表
     clickRight(key,miniWallkey) {
       this.key = key;
       this.miniWallkey = miniWallkey;
-      console.log(this.miniWallkey)
+      // console.log(this.miniWallkey)
       // 获取商品图片
-      this.getCotegoryRight(this.key);
-
+      this.getCotegoryRight(this.key); 
       // 获取商品详细信息
-      this.getCategoryDetail(this.miniWallkey)
     },
     getCotegoryRight(key) {
       getCotegoryRight(key).then((res) => {
         this.rightList = res.data.data.list
-        console.log(this.rightList);
+        // console.log(this.rightList);
       });
     },
-    getCategoryDetail(miniWallkey){
-      getCategoryDetail(miniWallkey).then(res =>{
+    getCategoryDetail(miniWallkey,type){
+      getCategoryDetail(miniWallkey,type).then(res =>{
         this.detaList = res.data
-        console.log(this.detaList)
+        // console.log(this.detaList)
       })
     }
   },

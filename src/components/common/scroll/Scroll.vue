@@ -28,7 +28,7 @@ export default {
     },
     mounted () {
         // 1.创建BScroll
-        this.scroll = new  BScroll(this.$refs.wrapper,{
+        this.scroll = new BScroll(this.$refs.wrapper,{
                 click:true,
                 probeType:this.probeType,
                 pullUpLoad:this.pullUpLoad

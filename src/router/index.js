@@ -20,15 +20,13 @@ const routes = [{
     }, {
         path: '/home',
         component: Home,
-
-        mate: {
+        meta: {
             title: '首页'
         }
     },
     {
         path: '/detail/:iid',
         component: Detail,
-
         meta: {
             title: '详情'
         }
@@ -36,22 +34,22 @@ const routes = [{
     {
         path: '/category',
         component: Categroy,
-        mate: {
-            title: '首页'
+        meta: {
+            title: '分类'
         }
     },
     {
         path: '/cart',
         component: Cart,
-        mate: {
-            title: '首页'
+        meta: {
+            title: '购物车'
         }
     },
     {
         path: '/profile',
         component: Profile,
-        mate: {
-            title: '首页'
+        meta: {
+            title: '我的'
         }
     }
 ]
@@ -62,13 +60,15 @@ const router = new VueRouter({
     routes
 })
 
-// router.beforeEach((to, from, next) => {
-//     // ${//to and from are Route Object,next() must be called to resolve the hook}
-//     if (to.mate.title) {
-//         document.title = to.mete.title
-//     }
-//     next()
+router.beforeEach((to, from, next) => {
+    // ${//to and from are Route Object,next() must be called to resolve the hook}
+    if (to.meta.title) {
+        document.title = to.matched[0].meta.title
+    }
+    // console.log('前置钩子')
+    next()
 
-// })
+})
+
 
 export default router

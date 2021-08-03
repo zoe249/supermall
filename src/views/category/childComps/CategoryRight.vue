@@ -1,6 +1,10 @@
 <template>
   <div class="category-right">
-    <scroll class="content">
+    <scroll class="content" 
+      @scroll="contentScroll"
+      :probe-type="3"
+      ref="scroll"
+      >
       <div class="image-item">
         <div
           class="right-item"
@@ -13,9 +17,11 @@
         </div>
       </div>
       <!-- tab -->
-      <tab-control :titles="['精品', '潮流', '热卖']" />
+      <tab-control :titles="['综合', '新品', '销量']"
+       @tabClick="clickTitle"/>
       <goods-list  :goods="detaList"/>
     </scroll>
+    <back-top @click.native="backTop" v-show="isShowBackTop"/>
   </div>
 </template>
 
@@ -23,7 +29,11 @@
 import Scroll from "@/components/common/scroll/Scroll.vue";
 import TabControl from "@/components/context/TabControl/TabControl.vue";
 import GoodsList from "@/components/context/goods/goodsList.vue";
+import backTop from '@/components/context/backTop/BackTop.vue'
+
+import {backTopMixin} from '@/common/mixin'
 export default {
+  mixins: [backTopMixin],
   props: {
     RightList: {
       type: Array,
@@ -39,21 +49,56 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      isShowBackTop:true,
+      currentType:'pop'
+    };
   },
   created() {
-    this.list = this.RightList, 
-    console.log(this.list);
+    this.list = this.RightList;
+    // console.log(this.list);
   },
   methods: {
     ClickLink(link) {
       window.location.href = link;
     },
+
+    // 点击切换
+    clickTitle(index){
+      console.log(index)
+      switch(index){
+        case 0:
+          this.currentType = 'pop'
+          break;
+        case 1:
+          this.currentType = 'new'
+          break;
+        case 2:
+          this.currentType = 'sell'
+          break;
+      }
+      this.$emit('tabType',this.currentType)
+    },
+    // 监听滑动
+    contentScroll(position){
+        // console.log(position)
+        // if(position.y<-1000){
+        //   this.isShowBackTop =  true
+        // }else{
+        //   this.isShowBackTop =  false
+        // }
+        this.listenShoBackTop(position)
+    },
+    // 返回顶部
+    // backTop(){
+    //    this.$refs.scroll.scrollTo(0, 0, 1000)
+    // }
   },
   components: {
     Scroll,
     TabControl,
     GoodsList,
+    backTop
   },
 };
 </script>
